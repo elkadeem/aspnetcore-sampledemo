@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using ApplicationSample.Web.DTO;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ApplicationSample.Web.Models;
 
 namespace ApplicationSample.Web.Pages.Customers
 {
@@ -18,11 +13,20 @@ namespace ApplicationSample.Web.Pages.Customers
             _context = context;
         }
 
-        public IList<Customer> Customer { get;set; } = default!;
+        public IList<CustomerDto> Customer { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Customer = await _context.Customers.ToListAsync();
+            Customer = await _context.Customers
+                .Select(c => new CustomerDto {
+                  Address = c.Address,
+                  BirthDay = c.BirthDay,
+                  Email = c.Email,
+                  Id = c.Id,
+                  IsActive = c.IsActive,
+                  Name = c.Name,
+                  Phone = c.Phone                  
+                 }).ToListAsync();
         }
     }
 }
