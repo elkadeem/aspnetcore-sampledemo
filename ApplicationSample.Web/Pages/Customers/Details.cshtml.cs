@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ApplicationSample.Web.Models;
+using ApplicationSample.Web.DTO;
 
 namespace ApplicationSample.Web.Pages.Customers
 {
@@ -18,7 +19,7 @@ namespace ApplicationSample.Web.Pages.Customers
             _context = context;
         }
 
-        public Customer Customer { get; set; } = default!;
+        public CustomerDto Customer { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,7 +28,17 @@ namespace ApplicationSample.Web.Pages.Customers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _context.Customers
+                .Select(c => new CustomerDto
+                {
+                    Address = c.Address,
+                    BirthDay = c.BirthDay,
+                    Email = c.Email,
+                    Id = c.Id,
+                    IsActive = c.IsActive,
+                    Name = c.Name,
+                    Phone = c.Phone
+                }).FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
                 return NotFound();
