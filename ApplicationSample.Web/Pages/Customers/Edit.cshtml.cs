@@ -63,6 +63,18 @@ namespace ApplicationSample.Web.Pages.Customers
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!string.IsNullOrWhiteSpace(Customer.Email)
+                 && _context.Customers.Any(c => c.Id != Customer.Id &&  c.Email == Customer.Email))
+            {
+                ModelState.AddModelError("Customer.Email", "Email already exists");
+            }
+
+            if (!string.IsNullOrWhiteSpace(Customer.Phone)
+                && _context.Customers.Any(c => c.Id != Customer.Id && c.Phone == Customer.Phone))
+            {
+                ModelState.AddModelError("Customer.Phone", "Phone already exists");
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();

@@ -30,13 +30,25 @@ namespace ApplicationSample.Web.Pages.Customers
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!string.IsNullOrWhiteSpace(CustomerViewModel.Email)
+                 && _context.Customers.Any(c => c.Email == CustomerViewModel.Email))
+            {
+                ModelState.AddModelError("CustomerViewModel.Email", "Email already exists");
+            }
+
+            if (!string.IsNullOrWhiteSpace(CustomerViewModel.Phone)
+                && _context.Customers.Any(c => c.Phone == CustomerViewModel.Phone))
+            {
+                ModelState.AddModelError("CustomerViewModel.Phone", "Phone already exists");
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
             Customer newCustomer = new Customer
-            {                
+            {
                 Name = CustomerViewModel.Name,
                 Address = CustomerViewModel.Address,
                 Email = CustomerViewModel.Email,
