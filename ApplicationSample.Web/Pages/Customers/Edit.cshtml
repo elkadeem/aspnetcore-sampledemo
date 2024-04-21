@@ -13,42 +13,42 @@
     <div class="col-md-4">
         <form enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Customer.Id" />
+            <input type="hidden" asp-for="CustomerViewModel.Id" />
             <div class="form-group">
-                <label asp-for="Customer.Name" class="control-label"></label>
-                <input asp-for="Customer.Name" class="form-control" />
-                <span asp-validation-for="Customer.Name" class="text-danger"></span>
+                <label asp-for="CustomerViewModel.Name" class="control-label"></label>
+                <input asp-for="CustomerViewModel.Name" class="form-control" />
+                <span asp-validation-for="CustomerViewModel.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Customer.Address" class="control-label"></label>
-                <input asp-for="Customer.Address" class="form-control" />
-                <span asp-validation-for="Customer.Address" class="text-danger"></span>
+                <label asp-for="CustomerViewModel.Address" class="control-label"></label>
+                <input asp-for="CustomerViewModel.Address" class="form-control" />
+                <span asp-validation-for="CustomerViewModel.Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Customer.Email" class="control-label"></label>
-                <input asp-for="Customer.Email" class="form-control" />
-                <span asp-validation-for="Customer.Email" class="text-danger"></span>
+                <label asp-for="CustomerViewModel.Email" class="control-label"></label>
+                <input asp-for="CustomerViewModel.Email" class="form-control" />
+                <span asp-validation-for="CustomerViewModel.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Customer.Phone" class="control-label"></label>
-                <input asp-for="Customer.Phone" class="form-control" />
-                <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+                <label asp-for="CustomerViewModel.Phone" class="control-label"></label>
+                <input asp-for="CustomerViewModel.Phone" class="form-control" />
+                <span asp-validation-for="CustomerViewModel.Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Customer.BirthDay" class="control-label"></label>
-                <input asp-for="Customer.BirthDay" class="form-control" />
-                <span asp-validation-for="Customer.BirthDay" class="text-danger"></span>
+                <label asp-for="CustomerViewModel.BirthDay" class="control-label"></label>
+                <input asp-for="CustomerViewModel.BirthDay" class="form-control" />
+                <span asp-validation-for="CustomerViewModel.BirthDay" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Customer.IsActive" /> @Html.DisplayNameFor(model => model.Customer.IsActive)
+                    <input class="form-check-input" asp-for="CustomerViewModel.IsActive" /> @Html.DisplayNameFor(model => model.CustomerViewModel.IsActive)
                 </label>
             </div>
             <div class="form-group">
-                <img src="@Url.Page("./CustomerPhoto", new { id = Model.Customer.Id })" style="width:100px;height:100px" />
-                <label asp-for="Customer.IdPhoto" class="control-label"></label>
-                <input asp-for="Customer.IdPhoto" class="form-control" />
-                <span asp-validation-for="Customer.IdPhoto" class="text-danger"></span>
+                <img src="@Url.Page("./CustomerPhoto", new { id = Model.CustomerViewModel.Id })" style="width:100px;height:100px" />
+                <label asp-for="CustomerViewModel.IdPhoto" class="control-label"></label>
+                <input asp-for="CustomerViewModel.IdPhoto" class="form-control" />
+                <span asp-validation-for="CustomerViewModel.IdPhoto" class="text-danger"></span>
             </div>            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

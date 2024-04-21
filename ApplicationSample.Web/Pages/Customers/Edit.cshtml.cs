@@ -21,7 +21,7 @@ namespace ApplicationSample.Web.Pages.Customers
         }
 
         [BindProperty]
-        public UpdateCustomerViewModel Customer { get; set; } = default!;
+        public UpdateCustomerViewModel CustomerViewModel { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -46,7 +46,7 @@ namespace ApplicationSample.Web.Pages.Customers
             {
                 return NotFound();
             }
-            Customer = new UpdateCustomerViewModel
+            CustomerViewModel = new UpdateCustomerViewModel
             {
                 Address = customer.Address,
                 BirthDay = customer.BirthDay,
@@ -63,14 +63,14 @@ namespace ApplicationSample.Web.Pages.Customers
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!string.IsNullOrWhiteSpace(Customer.Email)
-                 && _context.Customers.Any(c => c.Id != Customer.Id &&  c.Email == Customer.Email))
+            if (!string.IsNullOrWhiteSpace(CustomerViewModel.Email)
+                 && _context.Customers.Any(c => c.Id != CustomerViewModel.Id &&  c.Email == CustomerViewModel.Email))
             {
                 ModelState.AddModelError("Customer.Email", "Email already exists");
             }
 
-            if (!string.IsNullOrWhiteSpace(Customer.Phone)
-                && _context.Customers.Any(c => c.Id != Customer.Id && c.Phone == Customer.Phone))
+            if (!string.IsNullOrWhiteSpace(CustomerViewModel.Phone)
+                && _context.Customers.Any(c => c.Id != CustomerViewModel.Id && c.Phone == CustomerViewModel.Phone))
             {
                 ModelState.AddModelError("Customer.Phone", "Phone already exists");
             }
@@ -80,26 +80,26 @@ namespace ApplicationSample.Web.Pages.Customers
                 return Page();
             }
 
-            var currentCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == Customer.Id);
+            var currentCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == CustomerViewModel.Id);
             if (currentCustomer == null)
             {
                 return NotFound();
             }
 
-            currentCustomer.BirthDay = Customer.BirthDay;
-            currentCustomer.Email = Customer.Email;
-            currentCustomer.IsActive = Customer.IsActive;
-            currentCustomer.Name = Customer.Name;
-            currentCustomer.Phone = Customer.Phone;
-            currentCustomer.Address = Customer.Address;
+            currentCustomer.BirthDay = CustomerViewModel.BirthDay;
+            currentCustomer.Email = CustomerViewModel.Email;
+            currentCustomer.IsActive = CustomerViewModel.IsActive;
+            currentCustomer.Name = CustomerViewModel.Name;
+            currentCustomer.Phone = CustomerViewModel.Phone;
+            currentCustomer.Address = CustomerViewModel.Address;
 
-            if (Customer.IdPhoto != null)
+            if (CustomerViewModel.IdPhoto != null)
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    await Customer.IdPhoto.CopyToAsync(memoryStream);
+                    await CustomerViewModel.IdPhoto.CopyToAsync(memoryStream);
                     currentCustomer.IdPhoto = memoryStream.ToArray();
-                    currentCustomer.IdPhotoContentType = Customer.IdPhoto.ContentType;
+                    currentCustomer.IdPhotoContentType = CustomerViewModel.IdPhoto.ContentType;
                 }
             }
 
@@ -109,7 +109,7 @@ namespace ApplicationSample.Web.Pages.Customers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(Customer.Id))
+                if (!CustomerExists(CustomerViewModel.Id))
                 {
                     return NotFound();
                 }

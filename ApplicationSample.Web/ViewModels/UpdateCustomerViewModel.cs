@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationSample.Web.ViewModels
@@ -13,6 +14,8 @@ namespace ApplicationSample.Web.ViewModels
         [MaxLength(500)]
         public string? Address { get; set; }
 
+        [Remote(action: "VerifyEmail", controller: "CustomersValidation"
+            , AdditionalFields = nameof(Id))]
         [EmailAddress]
         public string Email { get; set; }
 
