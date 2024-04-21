@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApplicationSample.Web.Models;
+using ApplicationSample.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using ApplicationSample.Web.Models;
-using ApplicationSample.Web.ViewModels;
 
 namespace ApplicationSample.Web.Pages.Customers
 {
