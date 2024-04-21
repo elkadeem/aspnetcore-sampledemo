@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Customer.Id" />
             <div class="form-group">
@@ -45,15 +45,11 @@
                 </label>
             </div>
             <div class="form-group">
+                <img src="@Url.Page("./CustomerPhoto", new { id = Model.Customer.Id })" style="width:100px;height:100px" />
                 <label asp-for="Customer.IdPhoto" class="control-label"></label>
                 <input asp-for="Customer.IdPhoto" class="form-control" />
                 <span asp-validation-for="Customer.IdPhoto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Customer.IdPhotoContentType" class="control-label"></label>
-                <input asp-for="Customer.IdPhotoContentType" class="form-control" />
-                <span asp-validation-for="Customer.IdPhotoContentType" class="text-danger"></span>
-            </div>
+            </div>            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

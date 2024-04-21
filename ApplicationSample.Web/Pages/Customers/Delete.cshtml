@@ -55,10 +55,10 @@
             @Html.DisplayFor(model => model.Customer.IdPhoto)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.IdPhotoContentType)
+            ID Photo
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.IdPhotoContentType)
+            <img src="@Url.Page("./CustomerPhoto", new { id = Model.Customer.Id })" style="width:100px;height:100px" />
         </dd>
     </dl>
     

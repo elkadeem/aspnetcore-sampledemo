@@ -20,7 +20,15 @@ namespace ApplicationSample.Web.Pages.Customers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _context.Customers
+                .Select(c => new 
+                {
+                    Id = c.Id,
+                    IdPhoto = c.IdPhoto,
+                    IdPhotoContentType = c.IdPhotoContentType
+                })
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (customer == null 
                 || customer.IdPhoto == null
                 || string.IsNullOrWhiteSpace(customer.IdPhotoContentType))

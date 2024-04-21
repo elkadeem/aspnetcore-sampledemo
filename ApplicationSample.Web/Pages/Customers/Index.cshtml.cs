@@ -13,11 +13,11 @@ namespace ApplicationSample.Web.Pages.Customers
             _context = context;
         }
 
-        public IList<CustomerDto> Customer { get;set; } = default!;
+        public IList<CustomerDto> Customers { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Customer = await _context.Customers
+            Customers = await _context.Customers
                 .Select(c => new CustomerDto {
                   Address = c.Address,
                   BirthDay = c.BirthDay,

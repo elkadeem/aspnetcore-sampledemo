@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApplicationSample.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ApplicationSample.Web.Models;
 
 namespace ApplicationSample.Web.Pages.Customers
 {
@@ -28,7 +24,17 @@ namespace ApplicationSample.Web.Pages.Customers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _context.Customers
+                .Select(c => new Customer
+                {
+                    Address = c.Address,
+                    BirthDay = c.BirthDay,
+                    Email = c.Email,
+                    Id = c.Id,
+                    IsActive = c.IsActive,
+                    Name = c.Name,
+                    Phone = c.Phone
+                }).FirstOrDefaultAsync(m => m.Id == id);
 
             if (customer == null)
             {

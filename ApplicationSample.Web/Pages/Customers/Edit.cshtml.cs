@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ApplicationSample.Web.Models;
+using ApplicationSample.Web.ViewModels;
 
 namespace ApplicationSample.Web.Pages.Customers
 {
@@ -20,7 +21,7 @@ namespace ApplicationSample.Web.Pages.Customers
         }
 
         [BindProperty]
-        public Customer Customer { get; set; } = default!;
+        public UpdateCustomerViewModel Customer { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,12 +30,32 @@ namespace ApplicationSample.Web.Pages.Customers
                 return NotFound();
             }
 
-            var customer =  await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _context.Customers
+                .Select(c => new Customer
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Address = c.Address,
+                    Email = c.Email,
+                    Phone = c.Phone,
+                    BirthDay = c.BirthDay,
+                    IsActive = c.IsActive,
+                })
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
                 return NotFound();
             }
-            Customer = customer;
+            Customer = new UpdateCustomerViewModel
+            {
+                Address = customer.Address,
+                BirthDay = customer.BirthDay,
+                Email = customer.Email,
+                Id = customer.Id,
+                IsActive = customer.IsActive,
+                Name = customer.Name,
+                Phone = customer.Phone
+            };
             return Page();
         }
 
@@ -47,7 +68,28 @@ namespace ApplicationSample.Web.Pages.Customers
                 return Page();
             }
 
-            _context.Attach(Customer).State = EntityState.Modified;
+            var currentCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == Customer.Id);
+            if (currentCustomer == null)
+            {
+                return NotFound();
+            }
+
+            currentCustomer.BirthDay = Customer.BirthDay;
+            currentCustomer.Email = Customer.Email;
+            currentCustomer.IsActive = Customer.IsActive;
+            currentCustomer.Name = Customer.Name;
+            currentCustomer.Phone = Customer.Phone;
+            currentCustomer.Address = Customer.Address;
+
+            if (Customer.IdPhoto != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await Customer.IdPhoto.CopyToAsync(memoryStream);
+                    currentCustomer.IdPhoto = memoryStream.ToArray();
+                    currentCustomer.IdPhotoContentType = Customer.IdPhoto.ContentType;
+                }
+            }
 
             try
             {

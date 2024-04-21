@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationSample.Web.ViewModels
 {
-    public class AddCustomerViewModel
+    public class UpdateCustomerViewModel
     {
-        //[RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$", ErrorMessage = "The name must start with capital characheter and only english")]
+        public int Id { get; set; }
+
         [MaxLength(100)]
         public string Name { get; set; }
 
@@ -26,6 +27,6 @@ namespace ApplicationSample.Web.ViewModels
         public bool IsActive { get; set; }
 
         [DisplayName("ID Photo")]
-        public IFormFile IdPhoto { get; set; }
+        public IFormFile? IdPhoto { get; set; }
     }
 }
