@@ -1,4 +1,5 @@
-﻿using ApplicationSample.Web.Models;
+﻿using ApplicationSample.Web.BusinessServices;
+using ApplicationSample.Web.Models;
 using ApplicationSample.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,11 +8,11 @@ namespace ApplicationSample.Web.Pages.Customers
 {
     public class CreateModel : PageModel
     {
-        private readonly ApplicationSample.Web.Models.ApplicationDbContext _context;
+        private readonly CustomersService _customersService;
 
-        public CreateModel(ApplicationSample.Web.Models.ApplicationDbContext context)
+        public CreateModel(CustomersService customersService)
         {
-            _context = context;
+            _customersService = customersService;
         }
 
         public IActionResult OnGet()
@@ -25,18 +26,6 @@ namespace ApplicationSample.Web.Pages.Customers
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!string.IsNullOrWhiteSpace(CustomerViewModel.Email)
-                 && _context.Customers.Any(c => c.Email == CustomerViewModel.Email))
-            {
-                ModelState.AddModelError("CustomerViewModel.Email", "Email already exists");
-            }
-
-            if (!string.IsNullOrWhiteSpace(CustomerViewModel.Phone)
-                && _context.Customers.Any(c => c.Phone == CustomerViewModel.Phone))
-            {
-                ModelState.AddModelError("CustomerViewModel.Phone", "Phone already exists");
-            }
-
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -62,10 +51,20 @@ namespace ApplicationSample.Web.Pages.Customers
                 }
             }
 
-            _context.Customers.Add(newCustomer);
-            await _context.SaveChangesAsync();
+            var result = await _customersService.Add(newCustomer);
+            if (result.Count == 0)
+            {
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                foreach (var error in result)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
 
-            return RedirectToPage("./Index");
+                return Page();
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using ApplicationSample.Web.Models;
+﻿using ApplicationSample.Web.BusinessServices;
+using ApplicationSample.Web.DTO;
+using ApplicationSample.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -7,15 +9,15 @@ namespace ApplicationSample.Web.Pages.Customers
 {
     public class DeleteModel : PageModel
     {
-        private readonly ApplicationSample.Web.Models.ApplicationDbContext _context;
+        private readonly CustomersService _customersService;
 
-        public DeleteModel(ApplicationSample.Web.Models.ApplicationDbContext context)
+        public DeleteModel(CustomersService customersService)
         {
-            _context = context;
+            _customersService = customersService;
         }
 
         [BindProperty]
-        public Customer Customer { get; set; } = default!;
+        public CustomerDto Customer { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -24,18 +26,7 @@ namespace ApplicationSample.Web.Pages.Customers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Select(c => new Customer
-                {
-                    Address = c.Address,
-                    BirthDay = c.BirthDay,
-                    Email = c.Email,
-                    Id = c.Id,
-                    IsActive = c.IsActive,
-                    Name = c.Name,
-                    Phone = c.Phone
-                }).FirstOrDefaultAsync(m => m.Id == id);
-
+            var customer = await _customersService.GetCustomerAsync(id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -54,14 +45,7 @@ namespace ApplicationSample.Web.Pages.Customers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
-            {
-                Customer = customer;
-                _context.Customers.Remove(Customer);
-                await _context.SaveChangesAsync();
-            }
-
+            await _customersService.DeleteCustomerAsync(id.Value);
             return RedirectToPage("./Index");
         }
     }

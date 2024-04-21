@@ -1,16 +1,15 @@
+using ApplicationSample.Web.BusinessServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationSample.Web.Pages.Customers
 {
     public class CustomerPhotoModel : PageModel
     {
-        private readonly ApplicationSample.Web.Models.ApplicationDbContext _context;
-
-        public CustomerPhotoModel(ApplicationSample.Web.Models.ApplicationDbContext context)
+        private readonly CustomersService _customersService;
+        public CustomerPhotoModel(CustomersService customersService)
         {
-            _context = context;
+            _customersService = customersService;
         }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -20,24 +19,15 @@ namespace ApplicationSample.Web.Pages.Customers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Select(c => new 
-                {
-                    Id = c.Id,
-                    IdPhoto = c.IdPhoto,
-                    IdPhotoContentType = c.IdPhotoContentType
-                })
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var result = await _customersService.GetCustomerPhotoAsync(id.Value);
 
-            if (customer == null 
-                || customer.IdPhoto == null
-                || string.IsNullOrWhiteSpace(customer.IdPhotoContentType))
+            if (result.Photo == null
+                || string.IsNullOrWhiteSpace(result.ContentType))
             {
                 return NotFound();
             }
 
-
-            return File(customer.IdPhoto, customer.IdPhotoContentType);
+            return File(result.Photo, result.ContentType);
         }
     }
 }

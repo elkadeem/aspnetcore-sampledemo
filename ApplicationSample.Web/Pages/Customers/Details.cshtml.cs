@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ApplicationSample.Web.Models;
 using ApplicationSample.Web.DTO;
+using ApplicationSample.Web.BusinessServices;
 
 namespace ApplicationSample.Web.Pages.Customers
 {
     public class DetailsModel : PageModel
     {
-        private readonly ApplicationSample.Web.Models.ApplicationDbContext _context;
+        private readonly CustomersService _customersService;
 
-        public DetailsModel(ApplicationSample.Web.Models.ApplicationDbContext context)
+        public DetailsModel(CustomersService customersService)
         {
-            _context = context;
+            _customersService = customersService;
         }
 
         public CustomerDto Customer { get; set; } = default!;
@@ -28,17 +29,7 @@ namespace ApplicationSample.Web.Pages.Customers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Select(c => new CustomerDto
-                {
-                    Address = c.Address,
-                    BirthDay = c.BirthDay,
-                    Email = c.Email,
-                    Id = c.Id,
-                    IsActive = c.IsActive,
-                    Name = c.Name,
-                    Phone = c.Phone
-                }).FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _customersService.GetCustomerAsync(id.Value);
             if (customer == null)
             {
                 return NotFound();

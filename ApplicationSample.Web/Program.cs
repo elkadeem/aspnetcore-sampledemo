@@ -1,3 +1,4 @@
+using ApplicationSample.Web.BusinessServices;
 using ApplicationSample.Web.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ namespace ApplicationSample.Web
             builder.Services.AddControllersWithViews();
             builder.Services               
                 .AddRazorPages();
+
+            builder.Services.AddTransient<CustomersService>();
 
             var app = builder.Build();
 
