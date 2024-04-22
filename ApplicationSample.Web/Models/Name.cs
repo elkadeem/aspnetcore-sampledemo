@@ -1,7 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApplicationSample.Web.Models
 {
+    [Owned]
     public class Name
     {
         public Name(string firstName, string fatherName, string middleName, string lastName)
@@ -32,15 +35,19 @@ namespace ApplicationSample.Web.Models
             MiddleName = middleName;
         }
 
+        [Column("FirstName")]
         [MaxLength(50)]
         public string FirstName { get; private set; }
 
+        [Column("LastName")]
         [MaxLength(50)]
         public string LastName { get; private set; }
 
+        [Column("FatherName")]
         [MaxLength(50)]
         public string FatherName { get; private set; }
 
+        [Column("MiddleName")]
         [MaxLength(50)]
         public string MiddleName { get; private set; }
 
