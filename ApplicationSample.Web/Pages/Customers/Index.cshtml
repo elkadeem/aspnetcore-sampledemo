@@ -65,3 +65,14 @@
 }
     </tbody>
 </table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item"><a asp-page="./Index" asp-route-pagenumber="@(Model.PageNumber - 1)" class="page-link">Previous</a></li>
+        @for (int i = 1; i <= (Model.TotalItemsCount / Model.PageSize) + 1; i++)
+        {
+            <li class="page-item"><a asp-page="./Index" asp-route-pagenumber="@i" class="page-link">@i</a></li>
+        }
+        
+        <li class="page-item"><a asp-page="./Index" asp-route-pagenumber="@(Model.PageNumber + 1)" class="page-link">Next</a></li>
+    </ul>
+</nav>
