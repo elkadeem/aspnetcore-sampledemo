@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace ApplicationSample.Web.Pages.Customers
 {
@@ -15,12 +16,24 @@ namespace ApplicationSample.Web.Pages.Customers
             _context = context;
         }
 
-        public IList<CustomerDto> Customers { get;set; } = default!;
+        //public List<CustomerDto> Customers { get; set; } = default!;
+
+        public StaticPagedList<CustomerDto> Customers { get; set; } = default!;
         public int PageSize { get; set; } = 3;
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
 
         public int TotalItemsCount { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Name { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Address { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Email { get; set; }
+
         public async Task OnGetAsync()
         {
             PageNumber = Math.Max(1, PageNumber);
@@ -36,12 +49,36 @@ namespace ApplicationSample.Web.Pages.Customers
                     Phone = c.Phone
                 });
 
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                query = query.Where(c => c.Name.Contains(Name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(Address))
+            {
+                query = query.Where(c => c.Address.Contains(Address));
+            }
+
+            if(!string.IsNullOrWhiteSpace(Email))
+            {
+                query = query.Where(c => c.Email.Contains(Email));
+            }
+
+            //Customers = await query
+            //    .OrderBy(c => c.Name)
+            //    .Skip((PageNumber - 1) * PageSize)
+            //    .Take(PageSize)
+            //    .ToListAsync();
+
             TotalItemsCount = await query.CountAsync();
-            Customers = await query
+            var customers = await query
                 .OrderBy(c => c.Name)
-                .Skip((PageNumber -1) * PageSize)
+                .Skip((PageNumber - 1) * PageSize)
                 .Take(PageSize)
                 .ToListAsync();
+
+
+            Customers = new StaticPagedList<CustomerDto>(customers, PageNumber, PageSize, TotalItemsCount);
         }
     }
 }
